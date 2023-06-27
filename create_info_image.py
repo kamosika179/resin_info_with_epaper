@@ -3,7 +3,7 @@ from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
 
-def create_info_image(genshin_resin,is_genshin_daily,is_genshin_expedition,starrail_stamina,is_starrail_daily,is_starrail_expedition):
+def create_info_image(genshin_resin,is_genshin_expedition,is_genshin_daily,starrail_stamina,is_starrail_expedition,is_starrail_daily):
 
     # genshin,starrail,stamina information
     max_genshin_resin = 160
@@ -37,11 +37,11 @@ def create_info_image(genshin_resin,is_genshin_daily,is_genshin_expedition,starr
     base_img.paste(starrail_person_icon, (188,85),mask=starrail_person_icon)
 
     # exclamation_mark
-    if is_genshin_daily:
+    if is_genshin_daily == False:
         base_img.paste(exclamation_mark, (52,75),mask=exclamation_mark)
     if is_genshin_expedition:
         base_img.paste(exclamation_mark, (92,75),mask=exclamation_mark)
-    if is_starrail_daily:
+    if is_starrail_daily == False:
         base_img.paste(exclamation_mark, (158,75),mask=exclamation_mark)
     if is_starrail_expedition:
         base_img.paste(exclamation_mark, (198,75),mask=exclamation_mark)
@@ -49,7 +49,7 @@ def create_info_image(genshin_resin,is_genshin_daily,is_genshin_expedition,starr
     # Draw text
     draw = ImageDraw.Draw(base_img) 
     #font = ImageFont.load_default()
-    font = ImageFont.truetype('fonts-japanese-gothic.ttf',20)
+    font = ImageFont.truetype('IPAexfont00401/ipaexg.ttf',20)
     #genshin resin information
     draw.text((82, 55), f"/{max_genshin_resin}", (0, 0, 0), font=font)
     if genshin_resin == max_genshin_resin:
@@ -70,4 +70,5 @@ def create_info_image(genshin_resin,is_genshin_daily,is_genshin_expedition,starr
     base_img.save('info.png')
     return 'info.png'
 
-create_info_image(genshin_resin=160,is_genshin_daily=True,is_genshin_expedition=True,starrail_stamina=180,is_starrail_daily=True,is_starrail_expedition=True)
+if __name__ == "__main__":
+    create_info_image(genshin_resin=160,is_genshin_daily=True,is_genshin_expedition=True,starrail_stamina=180,is_starrail_daily=True,is_starrail_expedition=True)

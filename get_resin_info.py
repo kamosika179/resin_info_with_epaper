@@ -13,10 +13,43 @@ async def get_resin_info():
 
     client = genshin.Client(cookies)
 
-    genshin_resin = await client.get_genshin_notes(genshin_UID) #UID
-    starrail_resin = await client.get_starrail_notes(starrail_UID)
-    return (genshin_resin.current_resin, starrail_resin.current_stamina)
+    genshin_info = await client.get_genshin_notes(genshin_UID) #UID
+    starrail_info = await client.get_starrail_notes(starrail_UID)
+
+    #genshin expedition and commition info
+    genshin_finished_expedition_num = 0
+    for i in genshin_info.expeditions:
+        if i.status == "Finished":
+            genshin_finished_expedition_num += 1
+    
+    is_genshin_expedition_finished = False
+    if genshin_finished_expedition_num == genshin_info.max_expeditions:
+        is_genshin_expedition_finished = True
+    
+    is_genshin_commission_finished = False
+    if genshin_info.completed_commissions == genshin_info.max_commissions:
+        is_genshin_commission_finished = True
+    
+    #starrail expedition and commition info
+    starrail_finished_expedition_num = 0
+    for i in starrail_info.expeditions:
+        if i.status == "Finished":
+            starrail_finished_expedition_num += 1
+    
+    is_starrail_expedition_finished = False
+    if starrail_finished_expedition_num == starrail_info.total_expedition_num:
+        is_starrail_expedition_finished = True
+
+    is_starrail_commission_finished = True #本来False
+
+    """
+    #スターレイルのデイリー状況が取れないっぽい？のでTrueを返すようにしておきます。
+    if starrail_info.completed_commissions == starrail_info.max_commissions:
+        is_starrail_commission_finished = True
+    """
+
+    return (genshin_info.current_resin,is_genshin_expedition_finished,is_genshin_commission_finished,starrail_info.current_stamina,is_starrail_expedition_finished,is_starrail_commission_finished)
 
     
-
-#asyncio.run(main())
+if __name__ == "__main__":
+    print(asyncio.run(get_resin_info()))
